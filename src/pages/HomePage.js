@@ -1,18 +1,30 @@
-import React from 'react';
-// import XLSX from 'xlsx';
-const ExcelJS = require('exceljs');
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function HomePage() {
-  // const xlsx_file = XLSX.readFile('../../public/uploads/npm_xlsx.xlsx');
-  // console.log(xlsx_file);
-  var workbook = new ExcelJS.Workbook();
-  workbook.xlsx.readFile('../../public/uploads/npm_xlsx.xlsx')
-    .then(function() {
-      console.log('done!');
-    });
+  const [ data, setData ] = useState();
+
+  async function getData() {
+    axios.get('/time')
+      .then(function (response) {
+        setData(response.data.time)
+        console.log(response.data.time);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])
+
   return (
-    <div>Home Page!!!</div>
+    <>
+      <div>Home Page!!!</div>
+      <p>Current time: {data}</p>
+    </>
   )
 };
 
